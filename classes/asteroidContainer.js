@@ -19,8 +19,8 @@ class AsteroidContainer {
     generateAsteroids(_numAsteroids){
         for(var i=0;i<_numAsteroids;i++){
             do{
-                var randomX = getRandomInt(0,width);
-                var randomY = getRandomInt(0,height);
+                var randomX = getRandomInt(0,WIDTH);
+                var randomY = getRandomInt(0,HEIGHT);
                 var isAvailable = this.checkIfSpotTaken(randomX,randomY,40+8);
             }while(isAvailable);
 
@@ -51,7 +51,6 @@ class AsteroidContainer {
     }
     //------------------------UNFINISHED
     checkIfCollission(){
-
         for(var i=0;i<this.astArray.length-1;i++){
             for(var j=i+1;j<this.astArray.length;j++){
                 var collisionTest = this.collisionCompare(this.astArray[i],this.astArray[j]);

@@ -10,9 +10,6 @@ var ctx = canvas.getContext("2d");
 canvas.width = WIDTH;
 canvas.height = HEIGHT;
 
-console.log(window.innerHeight);
-console.log(document.documentElement.clientHeight);
-console.log(document.body.clientHeight);
 
 
 (function(){
@@ -35,6 +32,7 @@ console.log(document.body.clientHeight);
         drawLines(player.getCoordArray());
         asteroids.rotate();
         asteroids.updatePos();
+        asteroids.checkIfCollission();
         var asteroidsArray = asteroids.getCoordArrays();
         for(var i=0;i<asteroidsArray.length;i++){
             drawLines(asteroidsArray[i]);
@@ -53,23 +51,22 @@ function getRandomInt(min,max){
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function drawLines(arrayOfCoords){
+function drawLines(arrayOfxy){
     ctx.beginPath();
-    ctx.moveTo(arrayOfCoords[0].x,arrayOfCoords[0].y);
-    for(let i = 1;i<arrayOfCoords.length;i++){
-        ctx.lineTo(arrayOfCoords[i].x,arrayOfCoords[i].y);
+    ctx.moveTo(arrayOfxy[0].x,arrayOfxy[0].y);
+    for(let i = 1;i<arrayOfxy.length;i++){
+        ctx.lineTo(arrayOfxy[i].x,arrayOfxy[i].y);
     }
     //Check if array is complete i.e. if the first, and last value are the same
-    if(arrayOfCoords[0]!==arrayOfCoords[arrayOfCoords.length-1]){
-        ctx.lineTo(arrayOfCoords[0].x,arrayOfCoords[0].y);
+    if(arrayOfxy[0]!==arrayOfxy[arrayOfxy.length-1]){
+        ctx.lineTo(arrayOfxy[0].x,arrayOfxy[0].y);
     }
     ctx.stroke();
 }
-
 function setBackground(){
-	ctx.clearRect(0,0,width,height);
+	ctx.clearRect(0,0,WIDTH,HEIGHT);
 	ctx.fillStyle = '#707070';
-	ctx.fillRect(0,0,width,height);
+	ctx.fillRect(0,0,WIDTH,HEIGHT);
 }
 
 function keydown(event,player){
