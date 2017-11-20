@@ -9,8 +9,8 @@ class Asteroid{
         this.rot = _rotation; //Shooting certain part should make it rotate.
         this.nSides = _nSides; //Number of sides or "points" on an asteroid
         this.edgeAngleArray = _edgeAngles; //Array of angles for whatevs...
-        this.maxX = 400;
-        this.maxY = 400;
+        this.maxX = WIDTH;
+        this.maxY = HEIGHT;
     }
     generateAsteroid(){
         //return an array of x,y coordinates of the polygon that can be easily drawn

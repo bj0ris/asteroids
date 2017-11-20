@@ -2,17 +2,21 @@
 
 var html = document.getElementsByTagName('html')[0];
 var canvas = document.getElementById("canvas");
-const height = 400;
-const width = 400;
+var intFrameWidth = window.innerWidth;
+var intFrameHeight = window.innerHeight;
+const HEIGHT = intFrameHeight*0.9;
+const WIDTH = intFrameWidth/2;
 var ctx = canvas.getContext("2d");
-canvas.width = width;
-canvas.height = height;
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
 
-
+console.log(window.innerHeight);
+console.log(document.documentElement.clientHeight);
+console.log(document.body.clientHeight);
 
 
 (function(){
-    var player = new Player(new Coords(width/2,height/2),0,width,height);
+    var player = new Player(new Coords(WIDTH/2,HEIGHT/2),0,WIDTH,HEIGHT);
     //var asteroids = [];
     var asteroids = new AsteroidContainer(4);
 
@@ -22,7 +26,6 @@ canvas.height = height;
     html.addEventListener('keyup',function(e){
         keyup(e,player);
     });
-
     setInterval(function(){
         setBackground();
         player.rotate();
@@ -63,9 +66,9 @@ function drawLines(arrayOfxy){
     ctx.stroke();
 }
 function setBackground(){
-	ctx.clearRect(0,0,width,height);
+	ctx.clearRect(0,0,WIDTH,HEIGHT);
 	ctx.fillStyle = '#707070';
-	ctx.fillRect(0,0,width,height);
+	ctx.fillRect(0,0,WIDTH,HEIGHT);
 }
 
 function keydown(event,player){

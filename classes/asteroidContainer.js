@@ -8,8 +8,8 @@ class AsteroidContainer {
     }
     generateAsteroids(_numAsteroids){
         for(var i=0;i<_numAsteroids;i++){
-            var randomX = getRandomInt(0,width);
-            var randomY = getRandomInt(0,height);
+            var randomX = getRandomInt(0,WIDTH);
+            var randomY = getRandomInt(0,HEIGHT);
             var position = new Coords(randomX,randomY);
             var velocity = new Coords(getRandomFloat(0,1),getRandomFloat(0,1));
             var rotation =  getRandomFloat(0,0.5);
