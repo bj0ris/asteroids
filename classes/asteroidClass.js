@@ -3,14 +3,14 @@
 class Asteroid{
     constructor(_postition,_velocity,_rotation,_nSides,_edgeAngles,_coordArray){
         //this.stage = _stage; //Integer from 3-1 where 4 is the largest and can break 3 times to 1 which disintegrates on explosion
-        this.pos = _postition; //x0 and y0
-		this.vel = _velocity; //Direction given in radians
-        this.dir = 0;
-        this.rot = _rotation; //Shooting certain part should make it rotate.
+        this.pos = _postition; //x0 and y0 in Coords
+		this.vel = _velocity; // Vlocity in Coords
+        this.dir = 0;//Direction given in radians
+        this.rotPerUp = _rotation; //Rotation per update/screen
         this.nSides = _nSides; //Number of sides or "points" on an asteroid
         this.edgeAngleArray = _edgeAngles; //Array of angles for whatevs...
-        this.maxX = WIDTH;
-        this.maxY = HEIGHT;
+        this.maxX = 400;
+        this.maxY = 400;
     }
     generateAsteroid(){
         //return an array of x,y coordinates of the polygon that can be easily drawn
@@ -40,21 +40,21 @@ class Asteroid{
     updatePos(){
 		this.pos.x += this.vel.x;
 		this.pos.y += this.vel.y;
-		if(this.pos.x>this.maxX){
-			this.pos.x = 0;
+		if(this.pos.x>this.maxX+40){
+			this.pos.x = -40;
 		}
-		if(this.pos.x<0){
-			this.pos.x = this.maxX;
+		if(this.pos.x<-40){
+			this.pos.x = this.maxX+40;
 		}
-		if(this.pos.y>this.maxY){
-			this.pos.y = 0;
+		if(this.pos.y>this.maxY+40){
+			this.pos.y = -40;
 		}
-		if(this.pos.y<0){
-			this.pos.y = this.maxY;
+		if(this.pos.y<-40){
+			this.pos.y = this.maxY+40;
 		}
 	}
     rotate(){
-        this.dir += this.rot*0.1;
+        this.dir += this.rotPerUp*0.1;
     }
     getCoordArray(){
         var returnArray = [];

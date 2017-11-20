@@ -2,22 +2,16 @@
 
 var html = document.getElementsByTagName('html')[0];
 var canvas = document.getElementById("canvas");
-var intFrameWidth = window.innerWidth;
-var intFrameHeight = window.innerHeight;
-const HEIGHT = intFrameHeight*0.9;
-const WIDTH = intFrameWidth/2;
+const height = 400;
+const width = 400;
 var ctx = canvas.getContext("2d");
-canvas.width = WIDTH;
-canvas.height = HEIGHT;
+canvas.width = width;
+canvas.height = height;
 
-console.log(window.innerHeight);
-console.log(document.documentElement.clientHeight);
-console.log(document.body.clientHeight);
 
 
 (function(){
-    var player = new Player(new Coords(WIDTH/2,HEIGHT/2),0,WIDTH,HEIGHT);
-    //var asteroids = [];
+    var player = new Player(new Coords(width/2,height/2),0,width,height);
     var asteroids = new AsteroidContainer(4);
 
     html.addEventListener('keydown',function(e){
@@ -26,6 +20,7 @@ console.log(document.body.clientHeight);
     html.addEventListener('keyup',function(e){
         keyup(e,player);
     });
+
     setInterval(function(){
         setBackground();
         player.rotate();
@@ -35,11 +30,12 @@ console.log(document.body.clientHeight);
         drawLines(player.getCoordArray());
         asteroids.rotate();
         asteroids.updatePos();
+        asteroids.checkIfCollission();
         var asteroidsArray = asteroids.getCoordArrays();
         for(var i=0;i<asteroidsArray.length;i++){
             drawLines(asteroidsArray[i]);
         }
-    },20);
+    },100);
 })();
 
 
@@ -53,22 +49,23 @@ function getRandomInt(min,max){
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function drawLines(arrayOfxy){
+function drawLines(arrayOfCoords){
     ctx.beginPath();
-    ctx.moveTo(arrayOfxy[0].x,arrayOfxy[0].y);
-    for(let i = 1;i<arrayOfxy.length;i++){
-        ctx.lineTo(arrayOfxy[i].x,arrayOfxy[i].y);
+    ctx.moveTo(arrayOfCoords[0].x,arrayOfCoords[0].y);
+    for(let i = 1;i<arrayOfCoords.length;i++){
+        ctx.lineTo(arrayOfCoords[i].x,arrayOfCoords[i].y);
     }
     //Check if array is complete i.e. if the first, and last value are the same
-    if(arrayOfxy[0]!==arrayOfxy[arrayOfxy.length-1]){
-        ctx.lineTo(arrayOfxy[0].x,arrayOfxy[0].y);
+    if(arrayOfCoords[0]!==arrayOfCoords[arrayOfCoords.length-1]){
+        ctx.lineTo(arrayOfCoords[0].x,arrayOfCoords[0].y);
     }
     ctx.stroke();
 }
+
 function setBackground(){
-	ctx.clearRect(0,0,WIDTH,HEIGHT);
+	ctx.clearRect(0,0,width,height);
 	ctx.fillStyle = '#707070';
-	ctx.fillRect(0,0,WIDTH,HEIGHT);
+	ctx.fillRect(0,0,width,height);
 }
 
 function keydown(event,player){
