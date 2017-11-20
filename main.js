@@ -53,22 +53,23 @@ function getRandomInt(min,max){
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function drawLines(arrayOfxy){
+function drawLines(arrayOfCoords){
     ctx.beginPath();
-    ctx.moveTo(arrayOfxy[0].x,arrayOfxy[0].y);
-    for(let i = 1;i<arrayOfxy.length;i++){
-        ctx.lineTo(arrayOfxy[i].x,arrayOfxy[i].y);
+    ctx.moveTo(arrayOfCoords[0].x,arrayOfCoords[0].y);
+    for(let i = 1;i<arrayOfCoords.length;i++){
+        ctx.lineTo(arrayOfCoords[i].x,arrayOfCoords[i].y);
     }
     //Check if array is complete i.e. if the first, and last value are the same
-    if(arrayOfxy[0]!==arrayOfxy[arrayOfxy.length-1]){
-        ctx.lineTo(arrayOfxy[0].x,arrayOfxy[0].y);
+    if(arrayOfCoords[0]!==arrayOfCoords[arrayOfCoords.length-1]){
+        ctx.lineTo(arrayOfCoords[0].x,arrayOfCoords[0].y);
     }
     ctx.stroke();
 }
+
 function setBackground(){
-	ctx.clearRect(0,0,WIDTH,HEIGHT);
+	ctx.clearRect(0,0,width,height);
 	ctx.fillStyle = '#707070';
-	ctx.fillRect(0,0,WIDTH,HEIGHT);
+	ctx.fillRect(0,0,width,height);
 }
 
 function keydown(event,player){

@@ -60,6 +60,8 @@ class Player{
 		this.dir+= this.rot*0.1;
 	}
 	accelerate(){
+		//See what adding a boost when the tota velocity is low does
+		//I have a feeling it will make the steering feel mouch better.
 		var acc = 0.1;
 		var deltaVelX;
 		var deltaVelY;
