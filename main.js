@@ -31,6 +31,7 @@ canvas.height = height;
         asteroids.rotate();
         asteroids.updatePos();
         asteroids.checkIfCollission();
+        markSpot();
         var asteroidsArray = asteroids.getCoordArrays();
         for(var i=0;i<asteroidsArray.length;i++){
             drawLines(asteroidsArray[i]);
@@ -67,6 +68,39 @@ function setBackground(){
 	ctx.fillStyle = '#707070';
 	ctx.fillRect(0,0,width,height);
 }
+
+//-Spot drawer for debugging purposes------------------------------
+
+
+var previousSpot;
+function markSpot(){
+    if(previousSpot!==undefined){
+        ctx.arc(previousSpot[0], previousSpot[1], 5, 0, 2 * Math.PI, false);
+        ctx.fillStyle ='red';
+        ctx.lineStyle = 'red';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(previousSpot[2].x,previousSpot[2].y);
+        ctx.lineTo(previousSpot[3].x,previousSpot[3].y);
+        ctx.stroke();
+        ctx.moveTo(previousSpot[4].x,previousSpot[4].y);
+        ctx.lineTo(previousSpot[5].x,previousSpot[5].y);
+        ctx.stroke();
+    }
+}
+function newSpot(x,y,a0,a1,b0,b1){
+    previousSpot = [x,y,a0,a1,b0,b1];
+    /*
+    console.log("var a0 = {x:"+a0.x+",y:"+a0.y+"};"+
+                "var a1 = {x:"+a1.x+",y:"+a1.y+"};"+
+                "var b0 = {x:"+b0.x+",y:"+b0.y+"};"+
+                "var b1 = {x:"+b1.x+",y:"+b1.y+"};"+
+                "var X = "+x+";var Y = "+y+";"+"------------------");
+*/
+}
+
+
+//-------------------------------------------------------------------
 
 function keydown(event,player){
     var key = event.keyCode;

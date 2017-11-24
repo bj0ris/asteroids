@@ -55,7 +55,8 @@ class AsteroidContainer {
         for(var i=0;i<this.astArray.length-1;i++){
             for(var j=i+1;j<this.astArray.length;j++){
                 var collisionTest = this.collisionCompare(this.astArray[i],this.astArray[j]);
-                if(Array.isArray(collisionTest)){
+                //if(Array.isArray(collisionTest))
+                if(collisionTest){
                     /*A collision Happened!
                     What to do now? Well I think since it's in space the
                     collision should be mostly elastic, but not completely
@@ -86,27 +87,28 @@ class AsteroidContainer {
 
                 var a0 = array1[i];
                 var a1 = array1[i+1];
-                var smallXA;
-                var b0 = array2[i];
-                var b1 = array2[i+1];
-                var vectorBoxIntersectBool = this.vectorBoxIntersect(array1[i],array1[i+1],array2[j],array2[j+1]);
+                var b0 = array2[j];
+                var b1 = array2[j+1];
+                var vectorBoxIntersectBool = this.vectorBoxIntersect(a0,a1,b0,b1);
                 if(vectorBoxIntersectBool){
-                    var intersectPointBool = this.intersectPoint(array1[i],array1[i+1],array2[j],array2[j+1]);
-                    //if(intersectPointBool){
+                    var intersectPointBool = this.intersectPoint(a0,a1,b0,b1);
+                    if(intersectPointBool){
                         var returnArray = [array1[i],array1[i+1],array2[j],array2[j+1]];
-                        return returnArray;
-                    //}
+
+                        return true;
+                    }else{
+                    }
                 }
             }
         }
-        return null;
+        return false;
     }
     //This should perhaps be a global function.
     vectorBoxIntersect(a0,a1,b0,b1){
         var smallestAx = (a0.x<=a1.x ? a0.x:a1.x);
         var smallestAy = (a0.y<=a1.y ? a0.y:a1.y);
         var smallestBx = (b0.x<=b1.x ? b0.x:b1.x);
-        var smallestBy = (b0.x<=b1.y ? b0.y:b1.y);;
+        var smallestBy = (b0.x<=b1.y ? b0.y:b1.y);
         var largestAx = (a0.x>a1.x ? a0.x:a1.x);
         var largestAy = (a0.y>a1.y ? a0.y:a1.y);
         var largestBx = (b0.x>b1.x ? b0.x:b1.x);
@@ -119,12 +121,61 @@ class AsteroidContainer {
 
     }
     intersectPoint(a0,a1,b0,b1){
-        //Redefining so a0 is origo:
-        a0.redefineOrigoTo(a0.x,a0.y);
-        a1.redefineOrigoTo(a0.x,a0.y);
-        b0.redefineOrigoTo(a0.x,a0.y);
-        b1.redefineOrigoTo(a0.x,a0.y);
+
+        var aDeltaY = a1.y-a0.y;
+        var aDeltaX = a1.x-a0.x;
+        var bDeltaY = b1.y-b0.y;
+        var bDeltaX = b1.x-b0.x;
+        var A = (aDeltaY)/(aDeltaX);
+        var B = (bDeltaY)/(bDeltaX);
+        var c1 = a1.y-A*(a1.x);
+        var c2 = b1.y-B*(b1.x);
+        var X = (c2-c1)/(A-B);
+        var Y = A*X+c1;
+
+        var boolA = this.clockwiseTest(X,Y,a0,b1,a1,b0);
+        var boolB = this.clockwiseTest(X,Y,b0,a1,b1,a0);
+        if(boolB&&boolA){
+            /*
+            console.log("var a0 = {x:"+a0.x+",y:"+a0.y+"};"+
+                        "var a1 = {x:"+a1.x+",y:"+a1.y+"};"+
+                        "var b0 = {x:"+b0.x+",y:"+b0.y+"};"+
+                        "var b1 = {x:"+b1.x+",y:"+b1.y+"};"
+        );
+
+            console.log("var X = "+X+";var Y = "+Y+";");
+            console.log("------------------");
+            newSpot(X,Y,a0,a1,b0,b1);
+            */
+            return true;
+
+        }
+
         return false;
+    }
+    
+
+    clockwiseTest(X,Y,a,p,c,p2){
+    //Should perhaps change to rads, but I find degrees more intuitive
+    var toA = Math.floor(Math.atan2((a.y-Y),(a.x-X))*360/(Math.PI*2));
+    var toC = Math.floor(Math.atan2((c.y-Y),(c.x-X))*360/(Math.PI*2));
+    if(toA<0){
+        toA+=360;
+    }
+    if(toC<0){
+        toC+=360;
+    }
+    //Should perhaps add a delta so the range is 180(deg)
+    if(Math.abs(toA-toC)===180){
+        return true;
+    }else{
+        return false;
+        newSpot(X,Y,a,c,p,p2);
+    }
+}
+
+    shortestCW(offset,goal){
+        return ((360+offset)-goal<(goal-offset));
     }
     //--------------------------------END of UNFINISHED (lol)
 
@@ -147,3 +198,77 @@ class AsteroidContainer {
         return returnArray;
     }
 }
+
+/*
+Algorithm:
+    1)box intersect
+        Summary:
+        You are given four coordinates a0, a1, b0, b1. You can consider them "chatoic".
+            That is you do not know where these are in relation to each other. You don't know e.g if
+            b1 is to the right or left of b2, if it's above or bellow.
+        You have to determine wether their "boxes" intersect.
+        Visual demonstration:
+        http://silentmatt.com/rectangle-intersection/
+
+        Solution:
+            From the given coordinates pass them on like the boxes they define. That is eliminate the chaos.
+            How to do that:
+                send the smallest a#.x and a#.y to be the top left corner of A
+                send the smallest b#.x and b#.y to be the top left corner of B
+                send the largest a#.x and a#.y to be the bottom right corner of A
+                send the largest b#.x and b#.y to be the bottom right corner of B
+
+            Then:
+                A0<=B1 && A1>=B0     (General principle)
+
+                as coordinates: A0.x<=B1.x &&    <= True if A0 is to the left of B1(the right most B)
+                                A1.x>=B0.x &&    <= True if A1 is to the right of B0(the left most B)
+                                A0.y<=B1.y &&    <= True if A0 is above B1 (the bottom most B)
+                                A1.y>=B0.y       <= True if A1 is bellow B0 (the top most B)
+
+    2)Does line A intersect B
+        Since these steps have pretty much the same solution I compacted them into one.
+    3)Does line B intersect A
+        Summary:
+        Same as last time we are given the four coordinates; a0,a1 and b0,b1.
+        This time we can think of them for what they are. Namely points that define
+        the vector A and the Vector B.
+
+        Turns out there are no easy way to determine wether two defined vectors intersect or not.
+        At least not that I found out.
+<-Just found out how, see bellow.
+
+
+        So what we do instead is figure out the equations for both A and B in the form of y = aX + c1 and y = bX + c2.
+        We can then find the coordinates where these infinite linear equations intersect.
+
+        Okay I just did fucked up and did the box thing again. Let's be smart about this.
+        I'm fairly sure the algorithm is correct, it was the execution that failed.
+
+        we still have our equations: y=aX and y=bX, i think. The x,y coordinates we get seem
+        fine, but they are not hitting both lines simultanuasly, they are hitting the imaginary point where two infinite lines
+        would hit, as long as the two vectors are in intersecting boxes(algorithm step 1)
+
+        So evidently I just need to solve:
+            y=aX intersects the b0,b1 linesegment true or false?
+            y=bX intersects the a0,a1 linesegment true or false?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            --Bellow
+
+        Think clockwise,unclockwise. You have point a0,a1,b0,b1.
+
+*/
