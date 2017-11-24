@@ -2,16 +2,16 @@
 
 var html = document.getElementsByTagName('html')[0];
 var canvas = document.getElementById("canvas");
-const height = 400;
-const width = 400;
+const HEIGHT = 400;
+const WIDTH = 400;
 var ctx = canvas.getContext("2d");
-canvas.width = width;
-canvas.height = height;
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
 
 
 
 (function(){
-    var player = new Player(new Coords(width/2,height/2),0,width,height);
+    var player = new Player(new Coords(WIDTH/2,HEIGHT/2),0,WIDTH,HEIGHT);
     var asteroids = new AsteroidContainer(4);
 
     html.addEventListener('keydown',function(e){
@@ -36,7 +36,7 @@ canvas.height = height;
         for(var i=0;i<asteroidsArray.length;i++){
             drawLines(asteroidsArray[i]);
         }
-    },100);
+    },20);
 })();
 
 
@@ -64,9 +64,9 @@ function drawLines(arrayOfCoords){
 }
 
 function setBackground(){
-	ctx.clearRect(0,0,width,height);
+	ctx.clearRect(0,0,WIDTH,HEIGHT);
 	ctx.fillStyle = '#707070';
-	ctx.fillRect(0,0,width,height);
+	ctx.fillRect(0,0,WIDTH,HEIGHT);
 }
 
 //-Spot drawer for debugging purposes------------------------------
