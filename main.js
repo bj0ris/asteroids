@@ -2,8 +2,10 @@
 
 var html = document.getElementsByTagName('html')[0];
 var canvas = document.getElementById("canvas");
-const HEIGHT = 400;
-const WIDTH = 400;
+var intFrameWidth = window.innerWidth;
+var intFrameHeight = window.innerHeight;
+const HEIGHT = intFrameHeight*0.9;
+const WIDTH = intFrameWidth/2;
 var ctx = canvas.getContext("2d");
 canvas.width = WIDTH;
 canvas.height = HEIGHT;
