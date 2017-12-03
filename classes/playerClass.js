@@ -11,6 +11,7 @@ class Player{
 		this.maxX = _maxX;
 		this.maxY = _maxY;
 	}
+	//Returns an array of 3 different coordinates representing the corners of the player
 	getCoordArray(){
 		var h = 10; //Half the length of the player
 		var l = 5; //Half the width of the base of the player
@@ -39,9 +40,12 @@ class Player{
 
 		return returnArray;
 	}
+	//Updates the position based on velocity
 	updatePos(){
 		this.pos.x += this.vel.x;
 		this.pos.y += this.vel.y;
+
+		//Following is to have "screen wrap". The player appears on the opposite side, when out of bounds.
 		if(this.pos.x>this.maxX){
 			this.pos.x = 0;
 		}

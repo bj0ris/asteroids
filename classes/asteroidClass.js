@@ -9,37 +9,20 @@ class Asteroid{
         this.rotPerUp = _rotation; //Rotation per update/screen
         this.nSides = _nSides; //Number of sides or "points" on an asteroid
         this.edgeAngleArray = _edgeAngles; //Array of angles for whatevs...
-        this.maxX = 400;
-        this.maxY = 400;
-    }
-    generateAsteroid(){
-        //return an array of x,y coordinates of the polygon that can be easily drawn
-        //Also think of how it should handle breakages
-        var returnArray = [];
-        var size;
-        var x0 = this.pos.x;
-		var y0 = this.pos.y;
-		var angle = this.dir;
-
-        if(this.stage === 3){
-            size = 40;
-        }
-
-        if(this.stage === 2){
-            size = 20;
-        }
-
-        if(this.stage === 1){
-            size = 10;
-        }
+        this.maxX = WIDTH;
+        this.maxY = HEIGHT;
     }
 
     getShot(_directionOfShot){
         //Figure out where it got shot, and make 2-3-4(?) new Asteroids.
+        //TODO
     }
+    //Updates the x,y position based on velocity
     updatePos(){
 		this.pos.x += this.vel.x;
 		this.pos.y += this.vel.y;
+
+        //Following is to have "screen wrap" that is a litle larger then for the player
 		if(this.pos.x>this.maxX+40){
 			this.pos.x = -40;
 		}
@@ -56,6 +39,7 @@ class Asteroid{
     rotate(){
         this.dir += this.rotPerUp*0.1;
     }
+    //Generate an array of coords that represents the edges of the asteroid
     getCoordArray(){
         var returnArray = [];
         var maxFromRadius = 8;
@@ -66,9 +50,6 @@ class Asteroid{
             var x1 = this.pos.x+Math.sin(distanceBetweenPeaks*i+this.dir)*radius;
             var y1 = this.pos.y+Math.cos(distanceBetweenPeaks*i+this.dir)*radius;
 
-
-            //CHeck difference between one randomAngle for both
-            //Vs one for each!
             var randomAngle = this.edgeAngleArray[i];
             var x2 = x1+Math.sin(randomAngle+this.dir)*maxFromRadius;
             var y2 = y1+Math.cos(randomAngle+this.dir)*maxFromRadius;

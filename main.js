@@ -1,17 +1,16 @@
 'use strict';
 
+/*Setting up the canvas and other unimportant things*/
 var html = document.getElementsByTagName('html')[0];
 var canvas = document.getElementById("canvas");
-var intFrameWidth = window.innerWidth;
-var intFrameHeight = window.innerHeight;
-const HEIGHT = intFrameHeight*0.9;
-const WIDTH = intFrameWidth/2;
+const HEIGHT = window.innerHeight*0.9;
+const WIDTH = window.innerWidth/2;
 var ctx = canvas.getContext("2d");
 canvas.width = WIDTH;
 canvas.height = HEIGHT;
 
 
-
+/*main run-time part*/
 (function(){
     var player = new Player(new Coords(WIDTH/2,HEIGHT/2),0,WIDTH,HEIGHT);
     var asteroids = new AsteroidContainer(4);
@@ -33,7 +32,7 @@ canvas.height = HEIGHT;
         asteroids.rotate();
         asteroids.updatePos();
         asteroids.checkIfCollission();
-        markSpot();
+        //markSpot(); Draw spot. For debugging.
         var asteroidsArray = asteroids.getCoordArrays();
         for(var i=0;i<asteroidsArray.length;i++){
             drawLines(asteroidsArray[i]);
@@ -52,6 +51,7 @@ function getRandomInt(min,max){
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+/*Takes an array of Coordinates defined by the CoordsClass and draws it.*/
 function drawLines(arrayOfCoords){
     ctx.beginPath();
     ctx.moveTo(arrayOfCoords[0].x,arrayOfCoords[0].y);
@@ -71,9 +71,8 @@ function setBackground(){
 	ctx.fillRect(0,0,WIDTH,HEIGHT);
 }
 
+
 //-Spot drawer for debugging purposes------------------------------
-
-
 var previousSpot;
 function markSpot(){
     if(previousSpot!==undefined){
@@ -100,8 +99,6 @@ function newSpot(x,y,a0,a1,b0,b1){
                 "var X = "+x+";var Y = "+y+";"+"------------------");
 */
 }
-
-
 //-------------------------------------------------------------------
 
 function keydown(event,player){
